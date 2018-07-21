@@ -3,6 +3,7 @@ const path = require('path');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const { exec } = require('child_process');
+const rimraf = require('rimraf');
 
 const app = express();
 
@@ -49,6 +50,45 @@ async function splitDocument(req, res) {
         });
       });
     });
+}
+
+function createTempDirectory() {
+  let name = Math.random().toString(36).substring(7);
+  while (fs.existsSync('uploads/' + name)) {
+    name = Math.random().toString(36).substring(7);
+  }
+  fs.mkdirSync('uploads/' + name);
+  return name;
+}
+
+
+app.post('/v1/merge', splitDocument);
+async function splitDocument(req, res) {
+  console.log(Object.keys(req.files));
+  const name = createTempDirectory();
+  console.log(name);
+  const files = [];
+  for (let filename of Object.keys(req.files)) {
+    console.log(filename);
+    fs.writeFileSync(`uploads/${name}/${filename}.pdf`, req.files[filename].data);
+    files.push(`uploads/${name}/${filename}.pdf`);
+  }
+  const command = `pdfunite ${files.join(' ')} uploads/${name}/output.pdf`;
+  console.log(command);
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      return console.log(err);
+      // node couldn't execute the command
+      return;
+    }
+
+    // the *entire* stdout and stderr (buffered)
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+    console.log('aa', res.sendFile(`output.pdf`, {root: `./uploads/${name}`}));
+  });
+
+  // rimraf.sync('uploads/' + name);
 }
 
 const server = app.listen(process.env.PORT || 8081, function() {
