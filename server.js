@@ -62,8 +62,8 @@ function createTempDirectory() {
 }
 
 
-app.post('/v1/merge', splitDocument);
-async function splitDocument(req, res) {
+app.post('/v1/merge', mergeDocument);
+async function mergeDocument(req, res) {
   console.log(Object.keys(req.files));
   const name = createTempDirectory();
   console.log(name);
