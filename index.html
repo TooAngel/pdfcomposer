@@ -3,8 +3,19 @@
   <title>pdf area</title>
 </head>
 <body>
+  <h1>librePDF</h1>
+  <h2>Split</h2>
   <form action="/v1/split" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
+    <input type="submit" />
+  </form>
+  <h2>Merge</h2>
+  <form action="/v1/merge" method="post" enctype="multipart/form-data">
+    <input type="file" name="file1" />
+    <input type="file" name="file2" />
+    <input type="file" name="file3" />
+    <input type="file" name="file4" />
+    <input type="file" name="file5" />
     <input type="submit" />
   </form>
 </body>
