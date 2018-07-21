@@ -1,15 +1,31 @@
 {
-  "name": "pdf-area",
+  "name": "librepdf",
   "version": "1.0.0",
-  "description": "",
+  "description": "Webservice to split and merge PDFs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodejs server.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Tobias Wilken",
+  "license": "AGPL-3.0",
   "dependencies": {
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/TooAngel/librepdf.git"
+  },
+  "keywords": [
+    "pdf",
+    "split",
+    "merge",
+    "opensource"
+  ],
+  "bugs": {
+    "url": "https://github.com/TooAngel/librepdf/issues"
+  },
+  "homepage": "https://github.com/TooAngel/librepdf#readme"
 }
