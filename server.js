@@ -14,18 +14,17 @@ app.get('/', function(req, res) {
 });
 
 app.post('/v1/split', splitDocument);
-
 async function splitDocument(req, res) {
-  console.log(Object.keys(req.files.file));
-
-  fs.writeFile("uploads/tmp.pdf", req.files.file.data, function(err) {
+  const name = createTempDirectory();
+  console.log(name);
+  fs.writeFile(`uploads/${name}/upload.pdf`, req.files.file.data, function(err) {
       if(err) {
           return console.log(err);
       }
 
       console.log("The file was saved!");
 
-      exec('pdftk uploads/tmp.pdf burst', (err, stdout, stderr) => {
+      exec('pdftk upload.pdf burst', {cwd: `uploads/${name}`}, (err, stdout, stderr) => {
         if (err) {
           return console.log(err);
           // node couldn't execute the command
@@ -35,9 +34,11 @@ async function splitDocument(req, res) {
         // the *entire* stdout and stderr (buffered)
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
-
-        exec('zip downloads/ddd.zip pg_000*', (err, stdout, stderr) => {
+        console.log('zip file');
+        exec('zip output.zip pg_000*', {cwd: `uploads/${name}`}, (err, stdout, stderr) => {
           if (err) {
+            console.log(`stdout: ${stdout}`);
+            console.log(`stderr: ${stderr}`);
             return console.log(err);
             // node couldn't execute the command
             return;
@@ -46,7 +47,7 @@ async function splitDocument(req, res) {
           // the *entire* stdout and stderr (buffered)
           console.log(`stdout: ${stdout}`);
           console.log(`stderr: ${stderr}`);
-          console.log('aa', res.sendFile('ddd.zip', {root: './downloads'}));
+          console.log('aa', res.sendFile('output.zip', {root: `uploads/${name}`}));
         });
       });
     });
@@ -64,7 +65,6 @@ function createTempDirectory() {
 
 app.post('/v1/merge', mergeDocument);
 async function mergeDocument(req, res) {
-  console.log(Object.keys(req.files));
   const name = createTempDirectory();
   console.log(name);
   const files = [];
