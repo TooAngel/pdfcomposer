@@ -13,6 +13,15 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+function createTempDirectory() {
+  let name = Math.random().toString(36).substring(7);
+  while (fs.existsSync('uploads/' + name)) {
+    name = Math.random().toString(36).substring(7);
+  }
+  fs.mkdirSync('uploads/' + name);
+  return name;
+}
+
 app.post('/v1/split', splitDocument);
 async function splitDocument(req, res) {
   const name = createTempDirectory();
@@ -52,16 +61,6 @@ async function splitDocument(req, res) {
       });
     });
 }
-
-function createTempDirectory() {
-  let name = Math.random().toString(36).substring(7);
-  while (fs.existsSync('uploads/' + name)) {
-    name = Math.random().toString(36).substring(7);
-  }
-  fs.mkdirSync('uploads/' + name);
-  return name;
-}
-
 
 app.post('/v1/merge', mergeDocument);
 async function mergeDocument(req, res) {
