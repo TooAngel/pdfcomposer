@@ -6,11 +6,13 @@
   <style>input{display:block;}</style>
   <h1>librePDF</h1>
   <h2>Split</h2>
+  <div>Provide a pdf file which gets splitted</div>
   <form action="/v1/split" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <input type="submit" />
   </form>
   <h2>Merge</h2>
+  <div>Provide pdf files which are merged in the give order</div>
   <form action="/v1/merge" method="post" enctype="multipart/form-data">
     <input type="file" name="file1" />
     <input type="file" name="file2" />
